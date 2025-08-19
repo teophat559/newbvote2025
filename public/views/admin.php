@@ -84,8 +84,8 @@
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd;"><?= $contest['start_date'] ?> - <?= $contest['end_date'] ?></td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <button class="btn" onclick="alert('Tính năng chỉnh sửa sẽ được phát triển sau')">✏️ Sửa</button>
-                        <button class="btn" style="background: #dc3545;" onclick="alert('Tính năng xóa sẽ được phát triển sau')">🗑️ Xóa</button>
+                        <button class="btn" disabled title="Tính năng chỉnh sửa sẽ được phát triển sau">✏️ Sửa (Sắp ra mắt)</button>
+                        <button class="btn" style="background: #dc3545;" disabled title="Tính năng xóa sẽ được phát triển sau">🗑️ Xóa (Sắp ra mắt)</button>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -93,7 +93,7 @@
         </table>
 
         <div style="margin-top: 15px;">
-            <button class="btn" onclick="alert('Tính năng thêm cuộc thi sẽ được phát triển sau')">➕ Thêm cuộc thi mới</button>
+            <button class="btn" disabled title="Tính năng thêm cuộc thi sẽ được phát triển sau">➕ Thêm cuộc thi mới (Sắp ra mắt)</button>
         </div>
     </div>
 
@@ -125,8 +125,8 @@
                     </td>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;"><?= $contestant['total_votes'] ?></td>
                     <td style="padding: 8px; border: 1px solid #ddd;">
-                        <button class="btn" onclick="alert('Tính năng chỉnh sửa sẽ được phát triển sau')">✏️ Sửa</button>
-                        <button class="btn" style="background: #dc3545;" onclick="alert('Tính năng xóa sẽ được phát triển sau')">🗑️ Xóa</button>
+                        <button class="btn" disabled title="Tính năng chỉnh sửa sẽ được phát triển sau">✏️ Sửa (Sắp ra mắt)</button>
+                        <button class="btn" style="background: #dc3545;" disabled title="Tính năng xóa sẽ được phát triển sau">🗑️ Xóa (Sắp ra mắt)</button>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -134,17 +134,17 @@
         </table>
 
         <div style="margin-top: 15px;">
-            <button class="btn" onclick="alert('Tính năng thêm thí sinh sẽ được phát triển sau')">➕ Thêm thí sinh mới</button>
+            <button class="btn" disabled title="Tính năng thêm thí sinh sẽ được phát triển sau">➕ Thêm thí sinh mới (Sắp ra mắt)</button>
         </div>
     </div>
 
     <div class="card" style="margin-top: 20px;">
         <h3>🔧 Công cụ quản trị</h3>
         <div class="grid">
-            <button class="btn" onclick="alert('Tính năng backup dữ liệu sẽ được phát triển sau')">💾 Backup dữ liệu</button>
-            <button class="btn" onclick="alert('Tính năng xóa cache sẽ được phát triển sau')">🗑️ Xóa cache</button>
-            <button class="btn" onclick="alert('Tính năng log viewer sẽ được phát triển sau')">📋 Xem log</button>
-            <button class="btn" onclick="alert('Tính năng cài đặt hệ thống sẽ được phát triển sau')">⚙️ Cài đặt</button>
+            <button class="btn" disabled title="Tính năng backup dữ liệu sẽ được phát triển sau">💾 Backup dữ liệu (Sắp ra mắt)</button>
+            <button class="btn" disabled title="Tính năng xóa cache sẽ được phát triển sau">🗑️ Xóa cache (Sắp ra mắt)</button>
+            <button class="btn" disabled title="Tính năng log viewer sẽ được phát triển sau">📋 Xem log (Sắp ra mắt)</button>
+            <button class="btn" disabled title="Tính năng cài đặt hệ thống sẽ được phát triển sau">⚙️ Cài đặt (Sắp ra mắt)</button>
         </div>
     </div>
 </div>

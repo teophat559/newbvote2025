@@ -34,7 +34,7 @@
                     echo '<p>' . htmlspecialchars($contestant['description']) . '</p>';
                     echo '<p><strong>📊 Số phiếu:</strong> ' . $contestant['total_votes'] . '</p>';
                     if ($contest['status'] === 'active') {
-                        echo '<button class="btn" onclick="alert(\'Tính năng bỏ phiếu sẽ được phát triển sau\')">🗳️ Bỏ phiếu</button>';
+                        echo '<button class="btn" disabled title="Tính năng bỏ phiếu sẽ được phát triển sau">🗳️ Bỏ phiếu (Sắp ra mắt)</button>';
                     }
                     echo '</div>';
                 }
