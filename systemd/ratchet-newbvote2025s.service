@@ -1,0 +1,26 @@
+# /etc/systemd/system/ratchet-newbvote2025s.service
+# Systemd unit to run Ratchet WebSocket server for newbvote2025s
+
+[Unit]
+Description=Ratchet WebSocket Server (newbvote2025s)
+After=network.target
+
+[Service]
+Type=simple
+# Apache environment (Debian/Ubuntu)
+User=www-data
+Group=www-data
+# RHEL/CentOS/Alma alternative:
+#User=apache
+#Group=apache
+# Optional: load environment variables if needed (app already reads .env.production)
+#EnvironmentFile=/home/newbvote2025s.online/public_html/.env
+WorkingDirectory=/home/newbvote2025s.online/public_html
+ExecStart=/usr/bin/php /home/newbvote2025s.online/public_html/realtime/server.php
+Restart=always
+RestartSec=5
+StandardOutput=append:/home/newbvote2025s.online/public_html/logs/ws.stdout.log
+StandardError=append:/home/newbvote2025s.online/public_html/logs/ws.stderr.log
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+<?php
+namespace App\Services;
+use App\Core\DB;
+class RankingService { public function snapshotContest(int $contestId): void { $pdo = DB::conn(); $data = $pdo->prepare('SELECT ct.id, COUNT(v.id) as votes FROM contestants ct LEFT JOIN votes v ON v.contestant_id=ct.id WHERE ct.contest_id=? GROUP BY ct.id'); $data->execute([$contestId]); $rows = $data->fetchAll(); $pdo->prepare('INSERT INTO ranking_snapshots(contest_id, snapshot_time, payload) VALUES(?, NOW(), ?)')->execute([$contestId, json_encode($rows)]); } public function latestSnapshot(int $contestId): ?array { $pdo = DB::conn(); $stmt = $pdo->prepare('SELECT payload FROM ranking_snapshots WHERE contest_id=? ORDER BY snapshot_time DESC LIMIT 1'); $stmt->execute([$contestId]); $row = $stmt->fetch(); return $row ? json_decode($row['payload'], true) : null; } }

@@ -1,0 +1,70 @@
+{
+    "name": "newbvote2025s/voting-system",
+    "description": "Newb Vote 2025s - Voting System (Pure PHP)",
+    "type": "project",
+    "keywords": ["voting", "contest", "php", "newb-vote-2025s"],
+    "homepage": "https://newbvote2025s.online",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Newb Vote 2025s Team",
+            "email": "admin@newbvote2025s.online"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "cboden/ratchet": "^0.4.4",
+        "react/socket": "^1.14",
+        "react/event-loop": "^1.5",
+        "guzzlehttp/psr7": "^1.9",
+        "psr/http-message": "^1.1"
+    },
+    "suggest": {
+        "ext-pdo": "Required for database connectivity",
+        "ext-pdo_mysql": "Required for MySQL database support",
+        "ext-mbstring": "Required for multi-byte string handling",
+        "ext-curl": "Required for HTTP requests",
+        "ext-gd": "Required for image processing",
+        "ext-zip": "Required for file compression",
+        "ext-xml": "Required for XML processing",
+        "ext-json": "Required for JSON processing",
+        "ext-opcache": "Recommended for better performance",
+        "ext-bcmath": "Required for precise calculations"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"echo 'Newb Vote 2025s Voting System installed successfully!\\n';\""
+        ],
+        "check-requirements": [
+            "php -m | grep -E '(pdo|pdo_sqlite|pdo_mysql|mbstring|curl|gd|zip|xml|json)' || echo 'Missing required PHP extensions'"
+        ],
+        "setup-permissions": [
+            "chmod -R 755 .",
+            "chmod -R 777 uploads/",
+            "chmod -R 777 logs/",
+            "chmod -R 777 storage/"
+        ]
+    },
+    "extra": {
+        "project-info": {
+            "name": "Newb Vote 2025s Voting System",
+            "version": "1.0.0",
+            "framework": "Pure PHP",
+            "database": "MySQL only",
+            "webserver": "Apache 2.4+ / Nginx 1.18+",
+            "php-version": "8.1+"
+        }
+    }
+}

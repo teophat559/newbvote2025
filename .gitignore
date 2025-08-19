@@ -1,0 +1,50 @@
+# Environment files
+.env
+.env.local
+.env.production
+env.local
+
+# Logs
+logs/*
+!logs/.gitkeep
+*.log
+
+# Database files
+storage/*.db
+storage/*.sqlite
+!storage/.gitkeep
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Cache
+cache/
+tmp/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Composer
+vendor/
+composer.lock
+
+# Node modules (if any)
+node_modules/
+npm-debug.log*
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Temporary files
+*.tmp
+*.temp

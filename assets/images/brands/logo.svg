@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="180" height="48" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BVOTE">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="180" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#D946EF"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <!-- Badge -->
+  <rect x="2" y="6" rx="10" ry="10" width="56" height="36" fill="url(#g)" filter="url(#soft)"/>
+  <path d="M22 32l5-6 5 6M27 26v-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Wordmark -->
+  <g fill="#fff" opacity="0.95" transform="translate(66,12)">
+    <path d="M0 24V0h7.8c6.7 0 10.6 3.6 10.6 9.4 0 6-4 9.6-10.9 9.6H6.6V24H0zm6.6-15h1.1c3 0 4.8-1.3 4.8-3.6 0-2.4-1.8-3.6-4.7-3.6H6.6V9z"/>
+    <path d="M26.8 24V0h6.6v18h9.2v6h-15.8z"/>
+    <path d="M57 24l8.4-24h6.6L80.4 24h-6.5l-1.3-4H64.8l-1.3 4H57zm9.6-9.6h4.4L69 7.3 66.6 14.4z"/>
+    <path d="M85 24V0h6.6v24H85z"/>
+    <path d="M97.4 12c0-7.2 5.6-12.3 12.9-12.3s12.9 5.1 12.9 12.3S117.6 24.3 110.3 24.3 97.4 19.2 97.4 12zm19.1 0c0-3.8-2.6-6.4-6.2-6.4-3.6 0-6.2 2.6-6.2 6.4 0 3.8 2.6 6.4 6.2 6.4 3.6 0 6.2-2.6 6.2-6.4z"/>
+  </g>
+</svg>

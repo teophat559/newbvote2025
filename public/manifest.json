@@ -1,0 +1,11 @@
+{
+  "name": "BVOTE",
+  "short_name": "BVOTE",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#0b1020",
+  "background_color": "#0b1020",
+  "description": "Nền tảng bình chọn trực tuyến BVOTE",
+  "lang": "vi"
+}

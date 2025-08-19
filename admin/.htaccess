@@ -1,0 +1,16 @@
+Options -Indexes
+RewriteEngine On
+
+# Do not rewrite ACME HTTP-01 challenges
+RewriteRule ^\.well-known/acme-challenge/ - [L]
+
+# Serve real files or directories directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Default index
+DirectoryIndex index.php
+
+# Send everything else to admin index.php
+RewriteRule ^ index.php [QSA,L]

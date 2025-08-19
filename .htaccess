@@ -1,0 +1,120 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Set the base path automatically
+  RewriteBase /
+
+    # Backward compatibility: strip legacy /php-version prefix so old URLs still work
+    RewriteRule ^php-version/(.*)$ $1 [L]
+
+  # Skip existing files/directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Route all other requests to index.php
+  RewriteRule ^ index.php [L]
+ </IfModule>
+
+RewriteEngine On
+
+# Backward compatibility: strip legacy /php-version prefix (global)
+RewriteRule ^php-version/(.*)$ $1 [L]
+
+# Handle Authorization Header
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Redirect Trailing Slashes If Not A Folder...
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [L,R=301]
+
+# Send Requests To Front Controller...
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|log|sql|bak|backup|old|tmp|temp)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Prevent access to configuration files
+<FilesMatch "^(config|composer\.(json|lock)|package\.json|yarn\.lock|\.gitignore|README|CHANGELOG|LICENSE)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Prevent access to source code files
+<FilesMatch "\.(php|js|css|html|xml|txt)$">
+    <RequireAll>
+        Require all granted
+    </RequireAll>
+</FilesMatch>
+
+# URL Rewriting for clean URLs
+RewriteEngine On
+
+# Do not rewrite ACME HTTP-01 challenges
+RewriteRule ^\.well-known/acme-challenge/ - [L]
+
+
+# Handle public routes
+RewriteRule ^contests/?$ public/contests.php [L]
+RewriteRule ^contest/([0-9]+)/?$ public/contest_detail.php?id=$1 [L,QSA]
+RewriteRule ^rankings/?$ public/rankings.php [L]
+RewriteRule ^login/?$ public/login.php [L]
+RewriteRule ^register/?$ public/register.php [L]
+RewriteRule ^user/([^/]+)/?$ public/user_profile.php?username=$1 [L,QSA]
+
+# API routes
+RewriteRule ^api/(.*)$ api/$1 [L,QSA]
+
+# Prevent direct access to includes directory
+RewriteRule ^includes/ - [F,L]
+
+# Prevent direct access to src directory
+RewriteRule ^src/ - [F,L]
+
+# Prevent direct access to storage directory
+RewriteRule ^storage/ - [F,L]
+
+# Handle 404 errors
+ErrorDocument 404 /index.php
+
+# Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Caching
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>

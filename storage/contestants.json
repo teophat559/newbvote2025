@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "contest_id": 1,
+        "name": "Nguy\u1ec5n V\u0103n A",
+        "description": "Ca s\u0129 tr\u1ebb t\u00e0i n\u0103ng",
+        "image_url": "\/assets\/images\/default-generic.svg",
+        "total_votes": 150,
+        "status": "active",
+        "created_at": "2025-08-14 14:33:54"
+    },
+    {
+        "id": 2,
+        "contest_id": 1,
+        "name": "Tr\u1ea7n Th\u1ecb B",
+        "description": "V\u0169 c\u00f4ng xu\u1ea5t s\u1eafc",
+        "image_url": "\/assets\/images\/default-generic.svg",
+        "total_votes": 120,
+        "status": "active",
+        "created_at": "2025-08-14 14:33:54"
+    }
+]
