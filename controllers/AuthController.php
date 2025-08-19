@@ -48,7 +48,13 @@ class AuthController
         $pdo = DB::conn();
         $pdo->prepare('INSERT INTO otps(user_id, code, status, expires_at, created_at) VALUES(?, ?, "pending", DATE_ADD(NOW(), INTERVAL 5 MINUTE), NOW())')->execute([$userId, $code]);
         AuditLogService::log('otp_sent', $userId, [ 'otp_len' => strlen($code) ]);
-        Response::json(['ok'=>true,'code'=>$code]); // TODO: do not return code in prod
+        // In production, don't return the actual OTP code for security
+        if (defined('APP_ENV') && APP_ENV === 'production') {
+            Response::json(['ok'=>true,'message'=>'OTP sent successfully']);
+        } else {
+            // Only return code in development/testing
+            Response::json(['ok'=>true,'code'=>$code]);
+        }
     }
 
     public function verifyOtp(): void
