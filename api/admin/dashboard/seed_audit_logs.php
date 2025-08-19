@@ -11,11 +11,6 @@ use App\Services\AuditLogService;
 
 requireAdminKeyHeaderOrSession();
 
-// Disable seeding in production environment
-if (defined('APP_ENV') && APP_ENV === 'production') {
-    jsonResponse(['success' => false, 'message' => 'Seeding disabled in production'], 403);
-}
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     jsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
 }
