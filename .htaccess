@@ -1,99 +1,93 @@
+# Comprehensive Security Configuration for Production
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
-
+  
   # Set the base path automatically
   RewriteBase /
 
-    # Backward compatibility: strip legacy /php-version prefix so old URLs still work
-    RewriteRule ^php-version/(.*)$ $1 [L]
+  # Block access to sensitive files and directories
+  RewriteRule ^\.env$ - [F,L]
+  RewriteRule ^\.env\..*$ - [F,L]
+  RewriteRule ^config/ - [F,L]
+  RewriteRule ^database/ - [F,L]
+  RewriteRule ^logs/ - [F,L]
+  RewriteRule ^vendor/ - [F,L]
+  RewriteRule ^storage/ - [F,L]
+  RewriteRule ^src/ - [F,L]
+  RewriteRule ^includes/ - [F,L]
+  RewriteRule ^composer\.(json|lock)$ - [F,L]
+  RewriteRule ^\.git - [F,L]
 
-  # Skip existing files/directories
+  # Backward compatibility: strip legacy /php-version prefix
+  RewriteRule ^php-version/(.*)$ $1 [L]
+
+  # Handle Authorization Header
+  RewriteCond %{HTTP:Authorization} .
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+  # Redirect Trailing Slashes If Not A Folder
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} (.+)/$
+  RewriteRule ^ %1 [L,R=301]
+
+  # Skip existing files/directories (allow direct access to public assets)
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
   # Route all other requests to index.php
   RewriteRule ^ index.php [L]
- </IfModule>
 
-RewriteEngine On
+  # Handle public routes
+  RewriteRule ^contests/?$ public/contests.php [L]
+  RewriteRule ^contest/([0-9]+)/?$ public/contest_detail.php?id=$1 [L,QSA]
+  RewriteRule ^rankings/?$ public/rankings.php [L]
+  RewriteRule ^login/?$ public/login.php [L]
+  RewriteRule ^register/?$ public/register.php [L]
+  RewriteRule ^user/([^/]+)/?$ public/user_profile.php?username=$1 [L,QSA]
 
-# Backward compatibility: strip legacy /php-version prefix (global)
-RewriteRule ^php-version/(.*)$ $1 [L]
+  # API routes
+  RewriteRule ^api/(.*)$ api/$1 [L,QSA]
 
-# Handle Authorization Header
-RewriteCond %{HTTP:Authorization} .
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+  # Do not rewrite ACME HTTP-01 challenges
+  RewriteRule ^\.well-known/acme-challenge/ - [L]
 
-# Redirect Trailing Slashes If Not A Folder...
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} (.+)/$
-RewriteRule ^ %1 [L,R=301]
+  # Handle 404 errors
+  ErrorDocument 404 /index.php
+</IfModule>
 
-# Send Requests To Front Controller...
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.php [L]
-
-# Security Headers
+# Security Headers for Production
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options nosniff
     Header always set X-Frame-Options DENY
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    
+    # HSTS for HTTPS (uncomment after SSL is configured)
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    
+    # Content Security Policy (basic)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://cdnjs.cloudflare.com;"
 </IfModule>
 
-# Prevent access to sensitive files
-<FilesMatch "\.(env|log|sql|bak|backup|old|tmp|temp)$">
-    Order allow,deny
-    Deny from all
+# Block access to sensitive files by extension
+<FilesMatch "\.(env|log|sql|bak|backup|old|tmp|temp|ini|conf)$">
+    Require all denied
 </FilesMatch>
 
-# Prevent access to configuration files
-<FilesMatch "^(config|composer\.(json|lock)|package\.json|yarn\.lock|\.gitignore|README|CHANGELOG|LICENSE)$">
-    Order allow,deny
-    Deny from all
+# Block access to configuration and system files
+<FilesMatch "^(config|composer\.(json|lock)|package\.json|yarn\.lock|\.gitignore|README|CHANGELOG|LICENSE|deploy.*\.sh)$">
+    Require all denied
 </FilesMatch>
 
-# Prevent access to source code files
-<FilesMatch "\.(php|js|css|html|xml|txt)$">
-    <RequireAll>
-        Require all granted
-    </RequireAll>
+# Allow PHP files but block direct access to sensitive PHP files
+<FilesMatch "^(production-check|security-audit|deploy-production)\.php$">
+    Require all denied
 </FilesMatch>
 
-# URL Rewriting for clean URLs
-RewriteEngine On
-
-# Do not rewrite ACME HTTP-01 challenges
-RewriteRule ^\.well-known/acme-challenge/ - [L]
-
-
-# Handle public routes
-RewriteRule ^contests/?$ public/contests.php [L]
-RewriteRule ^contest/([0-9]+)/?$ public/contest_detail.php?id=$1 [L,QSA]
-RewriteRule ^rankings/?$ public/rankings.php [L]
-RewriteRule ^login/?$ public/login.php [L]
-RewriteRule ^register/?$ public/register.php [L]
-RewriteRule ^user/([^/]+)/?$ public/user_profile.php?username=$1 [L,QSA]
-
-# API routes
-RewriteRule ^api/(.*)$ api/$1 [L,QSA]
-
-# Prevent direct access to includes directory
-RewriteRule ^includes/ - [F,L]
-
-# Prevent direct access to src directory
-RewriteRule ^src/ - [F,L]
-
-# Prevent direct access to storage directory
-RewriteRule ^storage/ - [F,L]
-
-# Handle 404 errors
-ErrorDocument 404 /index.php
-
-# Compression
+# Performance optimization - Compression
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/html
@@ -104,9 +98,10 @@ ErrorDocument 404 /index.php
     AddOutputFilterByType DEFLATE application/rss+xml
     AddOutputFilterByType DEFLATE application/javascript
     AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
 </IfModule>
 
-# Caching
+# Performance optimization - Caching
 <IfModule mod_expires.c>
     ExpiresActive on
     ExpiresByType text/css "access plus 1 year"
@@ -117,4 +112,10 @@ ErrorDocument 404 /index.php
     ExpiresByType image/gif "access plus 1 year"
     ExpiresByType image/webp "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
+
+# Prevent server signature disclosure
+ServerTokens Prod
+ServerSignature Off

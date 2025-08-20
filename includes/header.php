@@ -37,6 +37,9 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo APP_URL; ?>/assets/css/style.css">
+    
+    <!-- Production Notification System -->
+    <script src="<?php echo APP_URL; ?>/assets/js/notifications.js"></script>
 
     <!-- Custom CSS -->
     <style>

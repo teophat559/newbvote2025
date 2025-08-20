@@ -250,8 +250,11 @@
 (function(){
   // Helpers
   function toast(msg, type){
-    try { if (window.SpecialProgram) return window.SpecialProgram.showToast(msg, type||'info'); } catch(e){}
-    alert(msg);
+    try { 
+      if (window.SpecialProgram) return window.SpecialProgram.showToast(msg, type||'info');
+      if (window.notifications) return window.notifications.show(msg, type||'info');
+    } catch(e){}
+    showNotification(msg, type||'info');
   }
   async function secureFetch(url, opts){
     const key = localStorage.getItem('ADMIN_KEY')||'';

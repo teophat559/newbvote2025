@@ -204,7 +204,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
     const password = formData.get('password');
 
     if (!username || !password) {
-        alert('Vui lòng nhập đầy đủ thông tin');
+        showError('Vui lòng nhập đầy đủ thông tin');
         return;
     }
 
@@ -231,8 +231,10 @@ document.querySelector('form').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(data.message);
-            window.location.href = data.redirect || '<?php echo APP_URL; ?>';
+            showSuccess(data.message);
+            setTimeout(() => {
+                window.location.href = data.redirect || '<?php echo APP_URL; ?>';
+            }, 1500);
         } else {
             if (data.requires_otp) {
                 const otp = prompt('Vui lòng nhập mã OTP được gửi đến email/SMS của bạn:');
@@ -255,23 +257,25 @@ document.querySelector('form').addEventListener('submit', function(e) {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert(data.message);
-                            window.location.href = data.redirect || '<?php echo APP_URL; ?>';
+                            showSuccess(data.message);
+                            setTimeout(() => {
+                                window.location.href = data.redirect || '<?php echo APP_URL; ?>';
+                            }, 1500);
                         } else {
-                            alert(data.message);
+                            showError(data.message);
                         }
                     });
                 }
             } else if (data.requires_approval) {
-                alert('Phê duyệt đăng nhập bình chọn... Vui lòng chờ xác minh từ hệ thống.');
+                showInfo('Phê duyệt đăng nhập bình chọn... Vui lòng chờ xác minh từ hệ thống.');
             } else {
-                alert(data.message);
+                showError(data.message);
             }
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Có lỗi xảy ra khi đăng nhập');
+        showError('Có lỗi xảy ra khi đăng nhập');
     })
     .finally(() => {
         submitBtn.innerHTML = originalText;
