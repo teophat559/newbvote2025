@@ -17,13 +17,63 @@ This guide provides step-by-step instructions for deploying the Newb Vote 2025s 
 - [x] Enhanced environment validation with security checks
 - [x] Added production-specific security validations
 - [x] Configured error display and logging for production
+- [x] Added insecure default value detection
+- [x] Improved security key validation and requirements
 
-### 3. Security Settings
-- [x] Error display disabled in production (`ERROR_DISPLAY=0`)
-- [x] Error logging enabled with secure log path
-- [x] Session security configured for HTTPS
-- [x] CORS settings configured for API endpoints
-- [x] Admin security key validation enhanced
+### 4. Security & Infrastructure
+- [x] Enhanced .htaccess with comprehensive security rules
+- [x] Updated Apache virtual host configurations for production
+- [x] Added CSP headers and security headers
+- [x] Improved file and directory access controls
+- [x] Added HSTS for HTTPS enforcement
+- [x] Created database security validation script
+- [x] Implemented comprehensive production cleanup procedures
+
+### 5. Deployment Automation
+- [x] Created comprehensive production deployment script (`deploy-production.sh`)
+- [x] Implemented 8-point production readiness validation
+- [x] Added automated backup and rollback scripts
+- [x] Created business flow testing framework
+- [x] Enhanced production readiness verification
+- [x] Automated cleanup of development artifacts
+
+## Quick Production Deployment
+
+### Using the Automated Script (Recommended)
+```bash
+# 1. Clone repository and navigate to project
+cd /var/www/newbvote2025s
+
+# 2. Copy and configure environment
+cp .env.production .env
+# Edit .env with your production values - IMPORTANT: Change security keys!
+nano .env
+
+# 3. Run comprehensive deployment check
+./deploy-production.sh
+
+# 4. If deployment check passes, proceed with database setup
+php database-security-check.php
+
+# 5. Test business functionality
+php test-business-flows.php
+
+# 6. Set up Apache virtual hosts
+sudo ./apache/deploy-apache.sh
+```
+
+### Manual Security Key Generation
+```bash
+# Generate secure admin key (20+ characters)
+openssl rand -base64 32
+
+# Generate encryption key (32+ characters)  
+openssl rand -base64 32
+
+# Update .env with these generated keys
+sed -i 's/ADMIN_SECURITY_KEY=.*/ADMIN_SECURITY_KEY=YOUR_GENERATED_KEY/' .env
+sed -i 's/DATA_ENCRYPTION_KEY=.*/DATA_ENCRYPTION_KEY=YOUR_GENERATED_KEY/' .env
+```
 
 ## Deployment Steps
 

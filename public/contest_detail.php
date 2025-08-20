@@ -277,15 +277,15 @@ function voteForContestant(contestantId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Bình chọn thành công!');
-            location.reload();
+            showNotification('Bình chọn thành công!', 'success');
+            setTimeout(() => location.reload(), 1500);
         } else {
-            alert(data.message || 'Có lỗi xảy ra khi bình chọn.');
+            showNotification(data.message || 'Có lỗi xảy ra khi bình chọn.', 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Có lỗi xảy ra khi bình chọn.');
+        showNotification('Có lỗi xảy ra khi bình chọn.', 'error');
     })
     .finally(() => {
         // Restore button state
@@ -300,6 +300,32 @@ document.getElementById('loginModal').addEventListener('click', function(e) {
         hideLoginModal();
     }
 });
+
+// Notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 ${
+        type === 'success' ? 'bg-green-500 text-white' : 
+        type === 'error' ? 'bg-red-500 text-white' : 
+        'bg-blue-500 text-white'
+    }`;
+    notification.innerHTML = `
+        <div class="flex items-center justify-between">
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white hover:text-gray-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
 
 // Auto-refresh every 30 seconds
 setInterval(function() {

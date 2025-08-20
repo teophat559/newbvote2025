@@ -35,6 +35,7 @@ $requiredKeys = [
     'TIMEZONE', 
     'DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS',
     'ADMIN_SECURITY_KEY',
+    'WS_HOST', 'WS_PORT'
 ];
 
 require_env_keys($requiredKeys);
@@ -68,6 +69,27 @@ if (defined('APP_ENV') && APP_ENV === 'production') {
     // Ensure error display is disabled
     if (env('ERROR_DISPLAY', 0)) {
         error_log("[WARN] ERROR_DISPLAY should be 0 in production");
+    }
+    
+    // Check for default/insecure values that should be changed
+    $insecureDefaults = [
+        'ADMIN_SECURITY_KEY' => ['your-secure-admin-key', 'admin123', 'password', 'secret'],
+        'DATA_ENCRYPTION_KEY' => ['your-32-character-encryption-key', 'encryption123', 'defaultkey'],
+        'DB_PASS' => ['password', '123456', 'root', 'admin']
+    ];
+    
+    foreach ($insecureDefaults as $key => $defaults) {
+        $value = env($key, '');
+        foreach ($defaults as $default) {
+            if (stripos($value, $default) !== false) {
+                error_log("[ERROR] $key contains insecure default value. Please change it in production.");
+                http_response_code(500);
+                header('Content-Type: text/plain; charset=utf-8');
+                echo "Security error: $key contains an insecure default value.\n";
+                echo "Please generate a unique, secure key for production deployment.";
+                exit;
+            }
+        }
     }
 }
 

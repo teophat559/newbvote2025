@@ -42,19 +42,39 @@ RewriteRule ^ index.php [L]
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header always set Content-Security-Policy "default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; connect-src 'self' ws: wss:"
+    
+    # Only set HSTS if HTTPS is enabled
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" env=HTTPS
+    
+    # Remove server information
+    Header unset Server
+    Header unset X-Powered-By
 </IfModule>
 
-# Prevent access to sensitive files
-<FilesMatch "\.(env|log|sql|bak|backup|old|tmp|temp)$">
+# Prevent access to sensitive files and directories
+<FilesMatch "\.(env|log|sql|bak|backup|old|tmp|temp|ini|conf)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
 
 # Prevent access to configuration files
-<FilesMatch "^(config|composer\.(json|lock)|package\.json|yarn\.lock|\.gitignore|README|CHANGELOG|LICENSE)$">
+<FilesMatch "^(config|composer\.(json|lock)|package\.json|yarn\.lock|\.gitignore|README|CHANGELOG|LICENSE|\.env\.*)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
+
+# Prevent access to sensitive directories
+<DirectoryMatch "^(.*/)?(\.|config|storage|logs|src|includes|vendor|node_modules)(/.*)?$">
+    Order allow,deny
+    Deny from all
+</DirectoryMatch>
+
+# Allow access to public assets
+<DirectoryMatch "^(.*/)?public(/.*)?$">
+    Order allow,deny
+    Allow from all
+</DirectoryMatch>
 
 # Prevent access to source code files
 <FilesMatch "\.(php|js|css|html|xml|txt)$">
