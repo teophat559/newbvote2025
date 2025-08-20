@@ -277,15 +277,15 @@ function voteForContestant(contestantId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Bình chọn thành công!');
-            location.reload();
+            showSuccess('Bình chọn thành công!');
+            setTimeout(() => location.reload(), 1500);
         } else {
-            alert(data.message || 'Có lỗi xảy ra khi bình chọn.');
+            showError(data.message || 'Có lỗi xảy ra khi bình chọn.');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Có lỗi xảy ra khi bình chọn.');
+        showError('Có lỗi xảy ra khi bình chọn.');
     })
     .finally(() => {
         // Restore button state
