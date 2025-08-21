@@ -1,0 +1,41 @@
+# WinSCP Script for newbvote2025s.online
+# Save this file as winscp-upload.txt
+
+# Connect to server (replace USERNAME with your actual username)
+open sftp://USERNAME@newbvote2025s.online
+
+# Change to remote directory
+cd /home/newbvote2025s.online/public_html
+
+# Upload main files
+put index.php
+put router.php
+put routes.php
+put .htaccess
+put .env
+
+# Upload folders recursively
+put -r api/
+put -r assets/
+put -r config/
+put -r controllers/
+put -r includes/
+put -r src/
+put -r views/
+put -r public/
+
+# Set permissions for PHP files
+call chmod 644 *.php
+call find . -name "*.php" -exec chmod 644 {} \;
+
+# Set permissions for directories
+call find . -type d -exec chmod 755 {} \;
+
+# Set special permissions
+call chmod 600 .env
+call chmod 755 uploads/
+call chmod 755 logs/
+call chmod 755 storage/
+
+# Exit
+exit
